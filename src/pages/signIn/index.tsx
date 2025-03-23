@@ -2,24 +2,39 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Helmet } from "react-helmet-async";
-import { useForm} from 'react-hook-form'
-import {z} from 'zod'
+import { useForm } from "react-hook-form";
+import { toast } from "sonner";
+import { z } from "zod";
 
 const signInSchema = z.object({
-  email: z.string().email()
-})
+  email: z.string().email(),
+});
 
-type SignInForm = z.infer<typeof  signInSchema>
+type SignInForm = z.infer<typeof signInSchema>;
 
 const SignIn = () => {
+  const {
+    register,
+    handleSubmit,
+    formState: { isSubmitting },
+  } = useForm<SignInForm>();
 
-  const {register, handleSubmit, formState : {isSubmitting} } =  useForm<SignInForm>();
+  const handleSignIn = async (data: SignInForm) => {
+    try {
+      console.log(data);
+      await new Promise((resolver) => setTimeout(resolver, 2000));
 
-  const handleSignIn =  (data : SignInForm) => {
+      toast.success("Enviamos um link de autenticação para seu e-mail.", {
+        action: {
+          label: "Reenviar",
+          onClick: () => handleSignIn(data)
+        }
+      });
 
-    console.log(data)
-   
-  }
+    } catch (error) {
+      toast.error("Email não registrado na plataforma.");
+    }
+  };
 
   return (
     <>
@@ -37,9 +52,11 @@ const SignIn = () => {
           <form className="space-y-4 " onSubmit={handleSubmit(handleSignIn)}>
             <div className="space-y-2">
               <Label htmlFor="email">Seu e-mail:</Label>
-              <Input id={"email"} type="email" {...register('email')} />
+              <Input id={"email"} type="email" {...register("email")} />
             </div>
-            <Button disabled={isSubmitting} className="w-full" type="submit">Acessar painel</Button>
+            <Button disabled={isSubmitting} className="w-full" type="submit">
+              Acessar painel
+            </Button>
           </form>
         </div>
       </div>
