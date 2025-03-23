@@ -41,7 +41,7 @@ const SignUp = () => {
 
   return (
     <>
-      <Helmet title="LogadastroCadasin" />
+      <Helmet title="Cadastro" />
       <div className="p-8 ">
         <Button asChild className="absolute right-8 top-8">
           <Link to="/sign-in">Fazer login</Link>
