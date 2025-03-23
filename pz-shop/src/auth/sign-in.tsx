@@ -11,7 +11,8 @@ const signInSchema = z.object({
   email: z.string().email(),
 });
 
-type SignInForm = z.infer<typeof signInSchema>;
+
+type SignInForm = z.infer<typeof  signInSchema>;
 
 const SignIn = () => {
   const {
