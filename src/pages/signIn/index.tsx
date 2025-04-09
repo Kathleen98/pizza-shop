@@ -6,6 +6,8 @@ import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { toast } from "sonner";
 import { Link } from "react-router-dom";
+import { useMutation } from "@tanstack/react-query";
+import { signIn } from "@/api/sign-in";
 
 const schemaSignIn = z.object({
   email: z.string().email(),
@@ -20,11 +22,15 @@ const SignIn = () => {
     formState: { isSubmitting },
   } = useForm<SignInForm>();
 
+  const { mutateAsync: authenticate } = useMutation({
+    mutationFn: signIn,
+  });
+
   const handleSignIn = async (data: SignInForm) => {
     try {
-      console.log(data);
+      console.log(data)
 
-      await new Promise((resolver) => setTimeout(resolver, 2000));
+      authenticate({email: data.email})
 
       toast.success("Enviamos um link de autenticação para seu email", {
         action: {
@@ -55,7 +61,7 @@ const SignIn = () => {
           <form onSubmit={handleSubmit(handleSignIn)} className="space-y-4 ">
             <div className="space-y-2">
               <Label htmlFor="email">Seu e-mail</Label>
-              <Input id="email" type="email" {...register("email")} />
+              <Input id="email" type="email" {...register("email", )} />
             </div>
             <Button disabled={isSubmitting} className="w-full">
               Acessar painel
